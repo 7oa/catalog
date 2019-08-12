@@ -1,0 +1,71 @@
+@import "fonts";
+
+body, html, #root {
+  height: 100%;
+  background-color: #fff;
+  min-width: 850px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "VerdanaPro", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+input, textarea{
+  font-family: "VerdanaPro", sans-serif;
+}
+
+button{
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  &:focus{
+    outline: none;
+  }
+}
+
+.app{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  // &.fixed{
+  //   overflow: hidden;
+  // }
+}
+
+.content{
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.container{
+  box-sizing: border-box;
+  width: 100%;
+  //max-width: 1180px;
+  padding: 0 50px;
+  margin: 0 auto;
+}
+
+.modal{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 999;
+  overflow: auto;
+}

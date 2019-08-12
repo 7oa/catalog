@@ -1,0 +1,55 @@
+.carousel {
+  position: relative;
+}
+
+.arrow {
+  position: absolute;
+  top: 40%;
+  font-size: 0;
+  line-height: 0;
+  width: 14px;
+  height: 14px;
+  transition: 0.4s;
+  &:hover {
+    border-color: #09b0f2;
+  }
+  &:focus {
+    outline: none;
+  }
+  &.disabled {
+    opacity: 0.2;
+  }
+}
+
+.prev {
+  left: -10px;
+  border-left: 2px solid #b7b7b7;
+  border-bottom: 2px solid #b7b7b7;
+  transform: rotate(45deg);
+}
+
+.next {
+  right: -10px;
+  border-right: 2px solid #b7b7b7;
+  border-bottom: 2px solid #b7b7b7;
+  transform: rotate(-45deg);
+}
+
+.gallery {
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: margin-left 0.5s;
+  display: flex;
+}
+
+.gallery li {
+  display: block;
+  position: relative;
+  flex: 0 0 auto;
+}

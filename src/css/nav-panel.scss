@@ -1,0 +1,86 @@
+.nav-panel{
+  &__subline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 35px;
+  }
+  &__filters{
+    display: flex;
+    align-items: center;
+  }
+}
+
+.submenu{
+  &__link{
+    font-size: 16px;
+    line-height: 1;
+    color: #bec2c5;
+    margin-right: 40px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .4s;
+    border-bottom: 4px solid transparent;
+    padding: 5px 0;
+    &:last-of-type{
+      margin-right: 0;
+    }
+    &.selected,
+    &:hover{
+      color: #000;
+    }
+    &.selected{
+      border-color: #09b0f2;
+    }
+  }
+}
+
+.sort-icon-Az{
+  span{
+    font-size: 22px;
+    &:first-of-type{
+      font-size: 27px;
+    }
+  }
+}
+
+.filter-icon{
+  width: 19px;
+  height: 20px;
+  background-image: url("/img/filter-icon.png");
+  background-position: center;
+  background-repeat: no-repeat; 
+  margin-left: 25px;
+}
+
+.link-back{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  
+  &__btn-back {
+    margin-right: 15px;
+    width: 10px;
+    height: 19px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/img/back-arrow.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: .4s;
+  }
+  &__title {
+    font-size: 23px;
+    line-height: 1;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+  &:hover{
+    .link-back__btn-back{
+      transform: translateX(-7px);
+    }
+  }
+}

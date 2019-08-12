@@ -1,0 +1,128 @@
+.files-list{
+  &__header{
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__title{
+    color: #969696;
+    font-size: 18px;
+    font-weight: 300;
+  }
+  &__sort{
+    width: 25px;
+    height: 11px;
+    &:after{
+      content: '';
+      display: block;
+      width: 25px;
+      height: 11px;
+      background-image: url("/img/sort.png");
+      transition: .4s;
+    }
+    &.asc{
+      &:after{
+        transform: scale(1, -1);
+      }
+    }
+  }
+}
+.files-accordeon{
+  &__group{
+    margin-bottom: 20px;
+  }
+  &__group-header{
+    color: #222222;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    position: relative;
+    cursor: pointer;
+    &.checked{
+      font-weight: 700;
+    }
+    &:before{
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-left: 6px solid #aaaaaa;
+      transition: .4s;
+    }
+    &.open{
+      &:before{
+        transform: rotate(90deg);
+      }
+    }
+  }
+  &__group-header-title{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+  }
+  &__group-header-size{
+    flex-shrink: 0;
+    width: 80px;
+    text-align: right;
+  }
+  &__group-list{
+    padding-left: 30px;
+    padding-top: 20px;
+    display: none;
+    &.open{
+      display: block;
+    }
+  }
+  &__group-item{
+    font-size: 14px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  &__group-item-title{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    cursor: pointer;
+  }
+  &__group-item-size{
+    flex-shrink: 0;
+    width: 80px;
+    text-align: right;
+  }
+  &__checkbox{
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid #acacac;
+    margin-right: 10px;
+    flex: 0 0 auto;
+    cursor: pointer;
+    &:after{
+      content: '';
+      display: block;
+      opacity: 0;
+      transition: .4s;
+      width: 4px;
+      height: 8px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(45deg) translateX(2px) translateY(-2px);
+    }
+    &.checked{
+      background-color: #00aef2;
+      border-color: #00aef2;
+      &:after{
+        opacity: 1;
+      }
+    }
+  }
+}
