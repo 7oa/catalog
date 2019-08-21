@@ -6,12 +6,15 @@ function Slider(props) {
   const [windowWidth, setWindowWidth] = useState(
     document.documentElement.offsetWidth
   );
+  const [carouselWidth, setCarouselWidth] = useState(0);
   const slidesList = props.children;
-  const slidesCount = parseInt((windowWidth - 60) / 187);
-  const slideWidth = parseInt((windowWidth - 60) / slidesCount);
-  const maxPosition = -slideWidth * (slidesList.length - slidesCount);
+  const slidesCount = parseInt((carouselWidth + 30) / 155);
+  const slideWidth = 155; //parseInt((windowWidth - 20) / slidesCount);
+  const maxPosition =
+    -slideWidth * (slidesList.length - slidesCount) +
+    (carouselWidth - slideWidth * slidesCount) +
+    30;
   const sliderRef = useRef(null);
-
   const slides = slidesList.map((item, index) => {
     return (
       <li key={index} style={{ width: slideWidth }}>
@@ -20,9 +23,21 @@ function Slider(props) {
     );
   });
 
-  const lazyLoad = () => {
-    sliderRef.current.childNodes.forEach(el => {
-      if (el.offsetLeft < -position + slideWidth * slidesCount) {
+  const slidesLoad = () => {
+    sliderRef.current.childNodes.forEach((el, i) => {
+      //убрать ховер у слайдеров, отображающихся не полностью
+      el.querySelector(".catalog-slider-item__img").classList.add("hide-hover");
+      if (
+        i >= Math.ceil(-position / 155) &&
+        i < Math.ceil(-position / 155) + slidesCount
+      ) {
+        sliderRef.current.childNodes[i]
+          .querySelector(".catalog-slider-item__img")
+          .classList.remove("hide-hover");
+      }
+
+      //lazy load
+      if (el.offsetLeft <= -position + slideWidth * slidesCount) {
         const img = el.querySelector("img[data-src]");
         if (img != null) {
           img.setAttribute("src", img.getAttribute("data-src"));
@@ -35,8 +50,12 @@ function Slider(props) {
   };
 
   useEffect(() => {
-    lazyLoad();
-  }, [position, windowWidth]);
+    setCarouselWidth(sliderRef.current.clientWidth);
+  }, [windowWidth]);
+
+  useEffect(() => {
+    slidesLoad();
+  }, [position, windowWidth, carouselWidth]);
 
   const prevSlide = () => {
     let _position = position;
@@ -62,7 +81,7 @@ function Slider(props) {
   }, [windowWidth]);
 
   return (
-    <div id="carousel" className="carousel">
+    <div className="carousel">
       {slidesList.length > slidesCount && (
         <React.Fragment>
           <button

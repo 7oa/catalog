@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 //import FilesList from "../components/FilesList";
 //import WatchList from "../components/WatchList";
 import { useFetch } from "../components/fetch";
-import Spinner from "../components/Spinner";
 
 import "../css/catalog-detail.scss";
 
@@ -28,7 +27,7 @@ function CatalogItem(props) {
     };
   });
 
-  if (catalogItem == null) return <Spinner />;
+  if (catalogItem == null) return null;
 
   if (error) return null;
 
@@ -55,6 +54,15 @@ function CatalogItem(props) {
     );
   });
 
+  const catalogItemGenres = catalogItem.genres;
+
+  const generes = catalogItemGenres.map((genre, i) => (
+    <span key={genre.title}>
+      {genre.title}
+      {i !== catalogItemGenres.length - 1 ? ", " : ""}
+    </span>
+  ));
+
   return (
     <div className="catalog-detail">
       {openMoreImages && (
@@ -72,8 +80,8 @@ function CatalogItem(props) {
         </React.Fragment>
       )}
       <div className="container catalog-detail__container">
-        <button className="catalog-detail__header" onClick={props.close}>
-          <div className="catalog-detail__btn-back" />
+        <div className="catalog-detail__header">
+          <button className="catalog-detail__btn-back" onClick={props.close} />
           <h1 className="catalog-detail__title">
             <span className="catalog-detail__title-ru">
               {description.title}
@@ -87,7 +95,7 @@ function CatalogItem(props) {
               </React.Fragment>
             )}
           </h1>
-        </button>
+        </div>
         <div className="catalog-detail__content">
           <div className="catalog-detail__col1">
             <div className="catalog-detail__poster">
@@ -111,34 +119,13 @@ function CatalogItem(props) {
           <div className="catalog-detail__col2">
             <div>
               <div className="catalog-detail__info-table">
-                {description.countries && (
+                {description.file_size && (
                   <div className="catalog-detail__info-table-row">
                     <div className="catalog-detail__info-table-label">
-                      Страна:
+                      Размер:
                     </div>
                     <div className="catalog-detail__info-table-val">
-                      {description.countries}
-                    </div>
-                  </div>
-                )}
-                {description.release_year && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">Год:</div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.release_year}
-                    </div>
-                  </div>
-                )}
-                {(description.imdb_rating || description.kp_rating) && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Рейтинг:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.imdb_rating &&
-                        `IMDB: ${description.imdb_rating}; `}
-                      {description.kp_rating &&
-                        `Kinopoisk: ${description.kp_rating}`}
+                      {description.file_size}
                     </div>
                   </div>
                 )}
@@ -162,16 +149,6 @@ function CatalogItem(props) {
                     </div>
                   </div>
                 )}
-                {description.sound && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Аудио:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.sound}
-                    </div>
-                  </div>
-                )}
 
                 {description.duration && (
                   <div className="catalog-detail__info-table-row">
@@ -183,23 +160,31 @@ function CatalogItem(props) {
                     </div>
                   </div>
                 )}
-                {description.file_size && (
+                {description.release_year && (
                   <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Размер:
-                    </div>
+                    <div className="catalog-detail__info-table-label">Год:</div>
                     <div className="catalog-detail__info-table-val">
-                      {description.file_size}
+                      {description.release_year}
                     </div>
                   </div>
                 )}
-                {description.director && (
+                {description.countries && (
                   <div className="catalog-detail__info-table-row">
                     <div className="catalog-detail__info-table-label">
-                      Продюссеры:
+                      Страна:
                     </div>
                     <div className="catalog-detail__info-table-val">
-                      {description.director}
+                      {description.countries}
+                    </div>
+                  </div>
+                )}
+                {description.countries && (
+                  <div className="catalog-detail__info-table-row">
+                    <div className="catalog-detail__info-table-label">
+                      Жанр:
+                    </div>
+                    <div className="catalog-detail__info-table-val">
+                      {generes}
                     </div>
                   </div>
                 )}
@@ -213,6 +198,31 @@ function CatalogItem(props) {
                     </div>
                   </div>
                 )}
+                {(description.imdb_rating || description.kp_rating) && (
+                  <div className="catalog-detail__info-table-row">
+                    <div className="catalog-detail__info-table-label">
+                      Рейтинг:
+                    </div>
+                    <div className="catalog-detail__info-table-val">
+                      {description.imdb_rating &&
+                        `IMDB: ${description.imdb_rating}; `}
+                      {description.kp_rating &&
+                        `Kinopoisk: ${description.kp_rating}`}
+                    </div>
+                  </div>
+                )}
+
+                {description.director && (
+                  <div className="catalog-detail__info-table-row">
+                    <div className="catalog-detail__info-table-label">
+                      Режиссер:
+                    </div>
+                    <div className="catalog-detail__info-table-val">
+                      {description.director}
+                    </div>
+                  </div>
+                )}
+
                 {description.developers && (
                   <div className="catalog-detail__info-table-row">
                     <div className="catalog-detail__info-table-label">
@@ -230,16 +240,6 @@ function CatalogItem(props) {
                     </div>
                     <div className="catalog-detail__info-table-val">
                       {description.platform}
-                    </div>
-                  </div>
-                )}
-                {description.format && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Формат:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.format}
                     </div>
                   </div>
                 )}
@@ -297,7 +297,7 @@ function CatalogItem(props) {
         )}
         <div className="copyright">
           <button
-            className="copyright__link"
+            className={`copyright__link ${copyrightShow ? "selected" : ""}`}
             onClick={() => setCopyrightShow(true)}
           >
             Правообладателям

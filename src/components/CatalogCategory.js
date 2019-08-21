@@ -1,23 +1,12 @@
 import React, { useContext } from "react";
-import { useFetch } from "../components/fetch";
 import { AppContext } from "../App";
 
 import { DownloadIcon, PlayIcon } from "./Icons";
 import "../css/catalog-category.scss";
 
-function CatalogCategory(props) {
+function CatalogCategory({ data }) {
   const { showModal } = useContext(AppContext);
-  const [error, catalogItem] = useFetch(
-    `/items?category=${props.category}&genre=${props.genre}`
-  );
-    
-  if (error || catalogItem == null) return null;
-
-  const items = catalogItem.map(item => {
-    let description = item.description;
-    if (description && description.length > 150)
-      description = description.substr(0, 150) + "...";
-
+  const items = data.map(item => {
     return (
       <div
         className="catalog-item"
@@ -45,12 +34,11 @@ function CatalogCategory(props) {
                     <PlayIcon />
                   </button>
                 </div>
-                <button className="catalog-item__btn-gray">Подписаться</button>
+                {/* <button className="catalog-item__btn-gray">Подписаться</button> */}
               </div>
             </div>
           </div>
           <div className="catalog-item__title">{item.title}</div>
-          <div className="catalog-item__subtitle">2018</div>
         </div>
       </div>
     );

@@ -6,41 +6,36 @@
   &__container {
     flex-grow: 1;
   }
-  &__header {
-    height: 31px;
-    margin-bottom: 40px;
-    display: flex;
-    //align-items: center;
-    text-decoration: none;
-    &:hover {
-      .catalog-detail__btn-back {
-        transform: translateX(-7px);
-      }
-    }
-  }
   &__btn-back {
-    margin-right: 15px;
-    width: 10px;
-    height: 19px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-right: 5px;
+    width: 40px;
+    height: 40px;
     background-image: url("/img/back-arrow.png");
     background-position: center;
     background-repeat: no-repeat;
-    transition: 0.4s;
     flex: 0 0 auto;
-    margin-top: 6px;
+    margin-left: -15px;
+    border-radius: 2px;
+    &:hover {
+      background-color: #f2f2f2;
+    }
+  }
+  &__header {
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
   }
   &__title {
     margin: 0;
     padding: 0;
     text-align: left;
+    line-height: 0;
   }
   &__title-ru {
     font-size: 23px;
-    line-height: 1;
-    font-weight: 700;
+    line-height: 1.2;
+    font-weight: 900;
     color: #000;
   }
   &__title-sep {
@@ -71,7 +66,7 @@
     margin-left: 30px;
   }
   &__poster {
-    max-width: 190px;
+    width: 190px;
     margin-bottom: 20px;
     background-image: url("/img/no-image.svg");
     background-position: center;
@@ -105,7 +100,8 @@
     }
   }
   &__description-title {
-    font-size: 16px;
+    color: #969696;
+    font-size: 14px;
     margin-bottom: 20px;
   }
   &__info-table-row {
@@ -222,7 +218,8 @@
     text-decoration: none;
     border-bottom: 1px solid #d7d7d7;
     transition: 0.4s;
-    &:hover {
+    &:hover,
+    &.selected {
       border-color: #09b0f2;
       color: #09b0f2;
     }
@@ -283,13 +280,11 @@
   &__info-title {
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 22px;
   }
   &__info-text {
     font-size: 13px;
-    a {
-      color: #00a5e6;
-    }
+    line-height: 1.5;
   }
 }
 .starIcon {

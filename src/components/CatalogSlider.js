@@ -14,10 +14,6 @@ const CatalogSlider = props => {
   if (error) return "Error";
 
   const items = data.map(item => {
-    let description = item.description;
-    if (description && description.length > 100)
-      description = description.substr(0, 100) + "...";
-
     return (
       <div className="catalog-slider-item" key={item.id}>
         <div
@@ -46,14 +42,13 @@ const CatalogSlider = props => {
                     <PlayIcon />
                   </button>
                 </div>
-                <button className="catalog-slider-item__btn-gray">
+                {/* <button className="catalog-slider-item__btn-gray">
                   Подписаться
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
           <div className="catalog-slider-item__title">{item.title}</div>
-          <div className="catalog-slider-item__subtitle">2018</div>
         </div>
       </div>
     );

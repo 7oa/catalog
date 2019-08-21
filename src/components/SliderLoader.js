@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
 
 const LoaderItem = () => {
   return (
     <ContentLoader
-      height={294}
-      width={147}
+      height={250}
+      width={125}
       speed={3}
       primaryColor="#f3f3f3"
       secondaryColor="#ecebeb"
     >
-      <rect x="0" y="0" rx="4" ry="4" width="160" height="220" />
-      <rect x="0" y="235" rx="4" ry="4" width="120" height="16" />
-      <rect x="0" y="253" rx="4" ry="4" width="100" height="16" />
-      <rect x="0" y="278" rx="4" ry="4" width="50" height="14" />
+      <rect x="0" y="0" rx="4" ry="4" width="125" height="200" />
+      <rect x="0" y="215" rx="4" ry="4" width="120" height="16" />
+      <rect x="0" y="233" rx="4" ry="4" width="100" height="16" />
     </ContentLoader>
   );
 };
@@ -34,10 +33,17 @@ const SliderLoader = () => {
   const [windowWidth, setWindowWidth] = useState(
     document.documentElement.offsetWidth
   );
+  const sliderRef = useRef(null);
+  const [carouselWidth, setCarouselWidth] = useState(0);
+  const slidesCount = parseInt((carouselWidth + 30) / 155);
 
   const handleResize = e => {
     setWindowWidth(document.documentElement.offsetWidth);
   };
+
+  useEffect(() => {
+    setCarouselWidth(sliderRef.current.clientWidth);
+  }, [windowWidth]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -46,17 +52,15 @@ const SliderLoader = () => {
     };
   }, [windowWidth]);
 
-  const slidesCount = parseInt((windowWidth - 60) / 187);
-
   return (
-    <section className="catalog-slider">
+    <section className="catalog-slider" ref={sliderRef}>
       <div className="container">
         <div className="catalog-slider__loader-title">
           <SlidersTitle />
         </div>
 
         <div className="catalog-slider__loader">
-          {[...Array(slidesCount)].map((e, i) => (
+          {[...Array(slidesCount)].map((_, i) => (
             <LoaderItem key={i} />
           ))}
         </div>
