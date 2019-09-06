@@ -1,23 +1,38 @@
-import React, { useState, useRef, useEffect } from "react";
-//import FilesList from "../components/FilesList";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback
+} from "react";
+import FilesList from "../components/FilesList";
 //import WatchList from "../components/WatchList";
 import { useFetch } from "../components/fetch";
+import { QTContext } from "../components/QTAPI";
+import Spinner from "../components/Spinner";
 
 import "../css/catalog-detail.scss";
 
 function CatalogItem(props) {
-  const [fullDescription, setFullDescription] = useState(false);
+  const [fullDescription, setFullDescription] = useState(true);
   const [openMoreImages, setOpenMoreImages] = useState(false);
   const [copyrightShow, setCopyrightShow] = useState(false);
+  const [selectedTorrents, setSelectedTorrents] = useState([]);
   const itemId = props.id;
   const [error, catalogItem] = useFetch("/item?id=" + itemId);
 
   const copyrightRef = useRef(null);
+  const descriptionWrapperRef = useRef(null);
+  const descriptionContentRef = useRef(null);
 
   function handleClickOutside(e) {
     if (copyrightRef.current && !copyrightRef.current.contains(e.target)) {
       setCopyrightShow(false);
     }
+  }
+
+  function addTorrents(files) {
+    setSelectedTorrents(files);
   }
 
   useEffect(() => {
@@ -27,7 +42,36 @@ function CatalogItem(props) {
     };
   });
 
-  if (catalogItem == null) return null;
+  useEffect(() => {
+    if (openMoreImages)
+      document.querySelector(".modal").style.overflow = "hidden";
+    else document.querySelector(".modal").style.overflow = "";
+  }, [openMoreImages]);
+
+  useEffect(() => {
+    if (
+      descriptionContentRef.current != null &&
+      descriptionWrapperRef.current != null
+    ) {
+      if (
+        descriptionWrapperRef.current.offsetHeight <
+        descriptionContentRef.current.offsetHeight + 5
+      )
+        setFullDescription(false);
+    }
+  }, [catalogItem]);
+
+  const mGetApi = useContext(QTContext);
+
+  const handleClick = useCallback(
+    play => {
+      catalogItem.content = selectedTorrents;
+      mGetApi.loadCatalogTorrent(JSON.stringify(catalogItem), play);
+    },
+    [mGetApi, catalogItem, selectedTorrents]
+  );
+
+  if (catalogItem == null) return <Spinner />;
 
   if (error) return null;
 
@@ -35,22 +79,43 @@ function CatalogItem(props) {
     return { ...result, [item.name]: item.value };
   }, []);
 
-  let descriptionSmall;
-
-  if (description.description && description.description.length > 500)
-    descriptionSmall = description.description.substr(0, 500) + "...";
-
   const moreImages = catalogItem.screenshots;
 
-  const lightboxImg = moreImages.map((img, index) => {
+  let screenshotMaxWidth = "45%";
+  let screenshotMaxHeight = "45vh";
+  let screenshots = [];
+
+  if (moreImages.length > 6) screenshots = moreImages.slice(0, 6);
+  else screenshots = moreImages;
+
+  switch (screenshots.length) {
+    default:
+    case 1:
+    case 2:
+      screenshotMaxHeight = "90vh";
+      break;
+    case 3:
+    case 4:
+      screenshotMaxWidth = "45%";
+      screenshotMaxHeight = "45vh";
+      break;
+    case 5:
+    case 6:
+      screenshotMaxWidth = "30%";
+      screenshotMaxHeight = "45vh";
+      break;
+  }
+
+  const lightboxImg = screenshots.map((img, index) => {
     return (
-      <div
+      <img
+        style={{ maxWidth: screenshotMaxWidth, maxHeight: screenshotMaxHeight }}
         className="lightbox__screenshot"
         key={index}
         onClick={e => e.stopPropagation()}
-      >
-        <img src={img.full} alt={index} />
-      </div>
+        src={img.full}
+        alt={index}
+      />
     );
   });
 
@@ -116,184 +181,207 @@ function CatalogItem(props) {
               </div>
             )}
           </div>
-          <div className="catalog-detail__col2">
-            <div>
-              <div className="catalog-detail__info-table">
-                {description.file_size && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Размер:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.file_size}
-                    </div>
-                  </div>
-                )}
-                {description.language && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Перевод:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.language}
-                    </div>
-                  </div>
-                )}
-                {description.video && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Качество:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.video}
-                    </div>
-                  </div>
-                )}
-
-                {description.duration && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Время:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.duration}
-                    </div>
-                  </div>
-                )}
-                {description.release_year && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">Год:</div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.release_year}
-                    </div>
-                  </div>
-                )}
-                {description.countries && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Страна:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.countries}
-                    </div>
-                  </div>
-                )}
-                {description.countries && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Жанр:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {generes}
-                    </div>
-                  </div>
-                )}
-                {description.cast && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Состав:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.cast}
-                    </div>
-                  </div>
-                )}
-                {(description.imdb_rating || description.kp_rating) && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Рейтинг:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.imdb_rating &&
-                        `IMDB: ${description.imdb_rating}; `}
-                      {description.kp_rating &&
-                        `Kinopoisk: ${description.kp_rating}`}
-                    </div>
-                  </div>
-                )}
-
-                {description.director && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Режиссер:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.director}
-                    </div>
-                  </div>
-                )}
-
-                {description.developers && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Разработчики:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.developers}
-                    </div>
-                  </div>
-                )}
-                {description.platform && (
-                  <div className="catalog-detail__info-table-row">
-                    <div className="catalog-detail__info-table-label">
-                      Платформа:
-                    </div>
-                    <div className="catalog-detail__info-table-val">
-                      {description.platform}
-                    </div>
-                  </div>
-                )}
-              </div>
-              {description.description && (
-                <React.Fragment>
-                  <div className="catalog-detail__description-title">
-                    Описание:
-                  </div>
-                  {descriptionSmall ? (
-                    <div className="catalog-detail__description">
-                      <div className="catalog-detail__description-text">
-                        {fullDescription
-                          ? description.description
-                          : descriptionSmall}
+          <div className="catalog-detail__col2" ref={descriptionWrapperRef}>
+            <div
+              className="catalog-detail__info-wrapper"
+              ref={descriptionContentRef}
+            >
+              <div className="catalog-detail__info">
+                <div className="catalog-detail__info-table">
+                  {description.file_size && (
+                    <div className="catalog-detail__info-table-row">
+                      <div className="catalog-detail__info-table-label">
+                        Размер:
                       </div>
-                      {!fullDescription && (
-                        <button
-                          className="catalog-detail__read-more"
-                          onClick={e => {
-                            setFullDescription(true);
-                            e.stopPropagation();
-                          }}
-                        >
-                          Читать больше..
-                        </button>
-                      )}
+                      <div className="catalog-detail__info-table-val">
+                        {description.file_size}
+                      </div>
                     </div>
-                  ) : (
+                  )}
+                  {description.language && (
+                    <div className="catalog-detail__info-table-row">
+                      <div className="catalog-detail__info-table-label">
+                        Перевод:
+                      </div>
+                      <div className="catalog-detail__info-table-val">
+                        {description.language}
+                      </div>
+                    </div>
+                  )}
+                  {description.video && (
+                    <div className="catalog-detail__info-table-row">
+                      <div className="catalog-detail__info-table-label">
+                        Качество:
+                      </div>
+                      <div className="catalog-detail__info-table-val">
+                        {description.video}
+                      </div>
+                    </div>
+                  )}
+
+                  {description.duration && (
+                    <div className="catalog-detail__info-table-row">
+                      <div className="catalog-detail__info-table-label">
+                        Время:
+                      </div>
+                      <div className="catalog-detail__info-table-val">
+                        {description.duration}
+                      </div>
+                    </div>
+                  )}
+
+                  {fullDescription && (
+                    <React.Fragment>
+                      {description.release_year && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Год:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.release_year}
+                          </div>
+                        </div>
+                      )}
+                      {description.countries && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Страна:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.countries}
+                          </div>
+                        </div>
+                      )}
+                      {description.countries && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Жанр:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {generes}
+                          </div>
+                        </div>
+                      )}
+                      {description.cast && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Состав:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.cast}
+                          </div>
+                        </div>
+                      )}
+                      {(description.imdb_rating || description.kp_rating) && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Рейтинг:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.imdb_rating &&
+                              `IMDB: ${description.imdb_rating}; `}
+                            {description.kp_rating &&
+                              `Kinopoisk: ${description.kp_rating}`}
+                          </div>
+                        </div>
+                      )}
+
+                      {description.director && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Режиссер:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.director}
+                          </div>
+                        </div>
+                      )}
+
+                      {description.developers && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Разработчики:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.developers}
+                          </div>
+                        </div>
+                      )}
+                      {description.platform && (
+                        <div className="catalog-detail__info-table-row">
+                          <div className="catalog-detail__info-table-label">
+                            Платформа:
+                          </div>
+                          <div className="catalog-detail__info-table-val">
+                            {description.platform}
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  )}
+                </div>
+                {fullDescription && description.description && (
+                  <React.Fragment>
+                    <div className="catalog-detail__description-title">
+                      Описание:
+                    </div>
+
                     <div className="catalog-detail__description">
                       <div className="catalog-detail__description-text">
                         {description.description}
                       </div>
                     </div>
-                  )}
-                </React.Fragment>
+                  </React.Fragment>
+                )}
+                {!fullDescription && (
+                  <button
+                    className="catalog-detail__read-more"
+                    onClick={e => {
+                      setFullDescription(true);
+                      e.stopPropagation();
+                    }}
+                  >
+                    Читать больше..
+                  </button>
+                )}
+              </div>
+              {catalogItem.content && catalogItem.content.length > 0 && (
+                <div className="catalog-detail__files">
+                  <FilesList
+                    data={catalogItem.content}
+                    addTorrents={addTorrents}
+                  />
+                </div>
               )}
             </div>
           </div>
-          {/* <div className="catalog-detail__col3">
-            <WatchList />
-          </div> */}
         </div>
       </div>
       <div className="buttons-line">
         {catalogItem.category === "movies" ? (
           <React.Fragment>
-            <button className="buttons-line__btn-blue">Скачать</button>
-            <button className="buttons-line__btn-gray">Смотреть</button>
+            <button
+              className="buttons-line__btn-blue"
+              onClick={() => handleClick(false)}
+            >
+              Скачать
+            </button>
+            <button
+              className="buttons-line__btn-gray"
+              onClick={() => handleClick(true)}
+            >
+              Смотреть
+            </button>
           </React.Fragment>
         ) : catalogItem.category === "serials" ? (
           <button className="buttons-line__btn-blue">Подписаться</button>
         ) : (
-          <button className="buttons-line__btn-blue">Скачать</button>
+          <button
+            className="buttons-line__btn-blue"
+            onClick={() => handleClick(false)}
+          >
+            Скачать
+          </button>
         )}
         <div className="copyright">
           <button

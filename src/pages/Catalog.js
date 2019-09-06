@@ -6,9 +6,13 @@ import CatalogSlider from "../components/CatalogSlider";
 import { DataCarousel } from "../components/fetch";
 import { GenresContext } from "../components/GetGenres";
 
-const Carousel = ({ genre, currentСategory }) => {
+const Carousel = ({ genre, currentСategory, pageSize }) => {
   return (
-    <DataCarousel genre={genre.id} category={currentСategory}>
+    <DataCarousel
+      genre={genre.id}
+      category={currentСategory}
+      page_size={pageSize}
+    >
       {(error, data) => {
         return (
           <CatalogSlider
@@ -17,6 +21,7 @@ const Carousel = ({ genre, currentСategory }) => {
             genreTitle={genre.title}
             genreId={genre.id}
             category={currentСategory}
+            pageSize={pageSize}
           />
         );
       }}
@@ -29,7 +34,12 @@ function Catalog() {
   const { genres, currentСategory } = ctx;
 
   let data = genres.map(genre => (
-    <Carousel genre={genre} currentСategory={currentСategory} key={genre.id} />
+    <Carousel
+      genre={genre}
+      currentСategory={currentСategory}
+      pageSize={18}
+      key={genre.id}
+    />
   ));
 
   const [state, setState] = React.useState({
@@ -46,7 +56,7 @@ function Catalog() {
 
   return (
     <React.Fragment>
-      <NavPanel view="menu" />
+      <NavPanel />
       <main>
         <InfiniteScroll
           pageStart={0}

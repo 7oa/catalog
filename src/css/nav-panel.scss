@@ -5,7 +5,7 @@
   left: 0;
   background-color: #fff;
   z-index: 2;
-  min-height: 28px;
+  min-height: 55px;
   &__subline {
     display: flex;
     align-items: center;
@@ -19,16 +19,17 @@
 }
 
 .submenu {
+  margin-top: 8px;
   &__link {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1;
     color: #bec2c5;
-    margin-right: 40px;
+    margin-right: 50px;
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     transition: 0.4s;
     border-bottom: 4px solid transparent;
-    padding: 5px 0;
+    padding: 3px 0;
     &:last-of-type {
       margin-right: 0;
     }

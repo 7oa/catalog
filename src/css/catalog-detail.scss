@@ -5,6 +5,7 @@
   height: 100%;
   &__container {
     flex-grow: 1;
+    overflow: hidden;
   }
   &__btn-back {
     margin-right: 5px;
@@ -25,6 +26,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
+    flex: 0 0 auto;
   }
   &__title {
     margin: 0;
@@ -35,7 +37,7 @@
   &__title-ru {
     font-size: 23px;
     line-height: 1.2;
-    font-weight: 900;
+    font-weight: 700;
     color: #000;
   }
   &__title-sep {
@@ -51,14 +53,23 @@
   }
   &__content {
     display: flex;
-    padding-bottom: 50px;
+    flex: 1 1 auto;
+    //padding-bottom: 50px;
+    align-items: flex-start;
+    height: calc(100% - 93px);
+    margin-right: -30px;
   }
   &__col1 {
     flex: 0 0 auto;
-    margin-right: 40px;
+
+    height: 100%;
   }
   &__col2 {
     flex-grow: 1;
+    overflow: auto;
+    height: 100%;
+    padding-right: 30px;
+    padding-left: 40px;
   }
   &__col3 {
     width: 370px;
@@ -88,6 +99,7 @@
   &__description-text {
     font-size: 14px;
     margin-bottom: 20px;
+    color: #000;
   }
   &__read-more {
     color: #969696;
@@ -103,6 +115,15 @@
     color: #969696;
     font-size: 14px;
     margin-bottom: 20px;
+  }
+  &__info-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__info {
+    padding-bottom: 20px;
+    max-width: 600px;
+    padding-right: 40px;
   }
   &__info-table-row {
     display: flex;
@@ -120,7 +141,7 @@
   }
   &__info-table-val {
     font-size: 14px;
-    color: #1e1e1e;
+    color: #000; //#1e1e1e;
     a {
       color: #1e1e1e;
       text-decoration: none;
@@ -156,6 +177,11 @@
         border-color: transparent;
       }
     }
+  }
+  &__files {
+    width: 600px;
+    max-width: 100%;
+    flex: 0 0 auto;
   }
 }
 .buttons-line {
@@ -309,7 +335,7 @@
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 99;
-  overflow: auto;
+  overflow: hidden;
   &__close {
     z-index: 2;
     position: absolute;
@@ -340,22 +366,29 @@
     }
   }
   &__wrapper {
-    margin: 5% auto 0;
-    width: 80%;
+    margin: 0 auto;
+    width: 99%;
     box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   &__screenshots {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
   }
   &__screenshot {
-    max-width: 45%;
+    // max-width: 45%;
+    // max-height: 45vh;
     margin: 10px;
     border: 1px solid #969696;
     line-height: 0;
-    img {
-      max-width: 100%;
-    }
+    // img {
+    //   max-width: 100%;
+    //   max-height: 100%;
+    // }
   }
 }

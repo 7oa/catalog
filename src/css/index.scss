@@ -12,8 +12,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: "VerdanaPro", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {
@@ -78,7 +78,7 @@ main {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  padding-top: 70px;
+  padding-top: 55px;
 }
 
 .container {
@@ -99,7 +99,7 @@ main {
   height: 100%;
   background-color: #fff;
   z-index: 999;
-  overflow: auto;
+  overflow: hidden;
   // transition: 0.6s;
   //transform: translateY(100%);
   opacity: 0;

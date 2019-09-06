@@ -14,6 +14,14 @@
 
 @font-face {
   font-family: "VerdanaPro";
+  font-weight: 600;
+  src: url("/fonts/VerdanaPro-SemiBold/VerdanaPro-SemiBold.woff2")
+      format("woff2"),
+    url("/fonts/VerdanaPro-SemiBold/VerdanaPro-SemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "VerdanaPro";
   font-weight: 700;
   src: url("/fonts/VerdanaPro-Bold/VerdanaPro-Bold.woff2") format("woff2"),
     url("/fonts/VerdanaPro-Bold/VerdanaPro-Bold.woff") format("woff");

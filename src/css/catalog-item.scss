@@ -1,0 +1,218 @@
+.catalog-item {
+  display: block;
+  text-decoration: none;
+
+  &__wrapper {
+    margin: 0 10px 30px;
+    width: 145px;
+    cursor: pointer;
+    &_slider {
+      margin: 15px 0;
+    }
+  }
+  &__img {
+    width: 100%;
+    height: 215px;
+    margin-bottom: 13px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    position: relative;
+    z-index: 2;
+    background-image: url("/img/no-image.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+    img[data-src] {
+      opacity: 0;
+    }
+    &.with-video {
+      &:before {
+        content: "";
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 16px;
+        height: 19px;
+        background-image: url("/img/play.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+    &:not(.hide-hover):hover {
+      //box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.2);
+      .catalog-item__info {
+        bottom: 0;
+        opacity: 1;
+      }
+    }
+  }
+  &__title {
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 18px;
+    // margin-bottom: 8px;
+    color: #000;
+    max-height: calc(18px * 2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  &__subtitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    line-height: 1;
+    color: #989898;
+  }
+  &__info {
+    position: absolute;
+    background-color: #0000008c;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 7px;
+    box-sizing: border-box;
+    color: #000;
+    transition: 0.4s;
+    opacity: 0;
+  }
+  &__info-top {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__info-bottom {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__info-text {
+    max-height: 95px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+  &__info-title {
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  &__info-description {
+    font-size: 8px;
+  }
+  &__info-rate {
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: right;
+  }
+  &__info-buttons {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__btn-round {
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    transition: all 0.4s ease 0s,
+      transform 0.4s cubic-bezier(0.19, 1.07, 0.6, 0.98) 0.1s;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    svg {
+      width: 50%;
+      height: 50%;
+    }
+    &:hover {
+      border-color: #00aef2;
+      background-color: #00aef2;
+    }
+    &.download {
+      top: 111px;
+      &:hover {
+        transform: scale(1.5) translateY(5px);
+      }
+    }
+    &.play {
+      bottom: 111px;
+      svg {
+        transform: translateX(2px);
+      }
+      &:hover {
+        transform: scale(1.5) translateY(-5px);
+      }
+    }
+    &.one {
+      top: 90px;
+      &:hover {
+        transform: scale(1.5);
+      }
+    }
+  }
+  &__btn-gray {
+    box-sizing: border-box;
+    padding: 0 7px;
+    font-size: 10px;
+    height: 22px;
+    border-radius: 11px;
+    background-color: #fff;
+    border: 1px solid #000;
+    color: #000;
+    transition: 0.4s;
+    &:hover {
+      border-color: #00aef2;
+    }
+  }
+  &__year {
+    color: #fff;
+    font-size: 12px;
+  }
+  &__size {
+    color: #fff;
+    font-size: 12px;
+  }
+  &__subscribe {
+    width: 24px;
+    height: 21px;
+    color: #fff;
+    transition: 0.4s;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+    &.active {
+      color: #ffcd30;
+    }
+  }
+}

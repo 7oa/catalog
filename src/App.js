@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import Spinner from "./components/Spinner";
 import ScrollToTop from "./components/ScrollToTop";
 import Catalog from "./pages/Catalog";
@@ -7,28 +7,50 @@ import CatalogList from "./pages/CatalogList";
 import CatalogDetail from "./pages/CatalogDetail";
 import { fetch } from "./components/fetch";
 import GetGenres from "./components/GetGenres";
+import QTAPI from "./components/QTAPI";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 export const AppContext = React.createContext();
 
 function App() {
-  const modalRef = useRef(null);
+  const modalDetailRef = useRef(null),
+    modalListRef = useRef(null);
   const [categories, setCategories] = useState([]);
-  const [modal, setModal] = useState({
+  const [modalDetail, setModalDetail] = useState({
     show: false,
-    detailId: undefined
+    detailId: null
   });
 
-  const showModal = id => {
-    document.body.style.overflow = "hidden";
-    setModal({
+  const [modalList, setModalList] = useState({
+    show: false,
+    category: null,
+    genre: null
+  });
+
+  const showModalDetail = id => {
+    setModalDetail({
       show: true,
       detailId: id
     });
   };
 
-  const closeModal = useCallback(() => {
-    document.body.style.overflow = "unset";
-    setModal({
+  const showModalList = (category, genre, genreTitle) => {
+    setModalList({
+      show: true,
+      category,
+      genre,
+      genreTitle
+    });
+  };
+
+  const closeModalDetail = useCallback(() => {
+    setModalDetail({
+      show: false
+    });
+  }, []);
+
+  const closeModalList = useCallback(() => {
+    setModalList({
       show: false
     });
   }, []);
@@ -51,46 +73,79 @@ function App() {
   useEffect(() => {
     fetch({ url: "/categories" }).then(data => {
       if (data.status === "OK") {
-        setCategories(data.payload);
+        const categories = data.payload.filter(
+          category => !["other", "books", "music"].includes(category.code)
+        );
+        setCategories(categories);
       }
     });
   }, []);
 
   useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current.classList.toggle("open");
+    if (modalDetailRef.current) {
+      modalDetailRef.current.classList.toggle("open");
     }
-  }, [modal.show]);
+  }, [modalDetail.show]);
+
+  useEffect(() => {
+    if (modalListRef.current) {
+      modalListRef.current.classList.toggle("open");
+    }
+  }, [modalList.show]);
+
+  useEffect(() => {
+    if (modalDetail.show || modalList.show)
+      document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+  }, [modalDetail.show, modalList.show]);
 
   if (categories && categories.length < 1) return <Spinner />;
 
   return (
-    <BrowserRouter onUpdate={() => window.scrollTo(0, 0)}>
-      <ScrollToTop>
-        <AppContext.Provider value={{ categories, showModal }}>
-          <div className={`${modal.show ? "fixed " : ""}app`}>
-            <div className="content">
-              <Route
-                exact
-                path="/"
-                render={() => (
-                  <GetGenres>
-                    <Catalog />
-                  </GetGenres>
+    <ErrorBoundary>
+      <QTAPI>
+        <BrowserRouter onUpdate={() => window.scrollTo(0, 0)}>
+          <ScrollToTop>
+            <AppContext.Provider
+              value={{ categories, showModalDetail, showModalList }}
+            >
+              <div className={`${modalDetail.show ? "fixed " : ""}app`}>
+                <div className="content">
+                  <Route
+                    exact
+                    path="/"
+                    render={() => <Redirect to="/movies" />}
+                  />
+                  {routes}
+                  {/* <Route
+                    path="/:category/genre-:genre"
+                    component={CatalogList}
+                  /> */}
+                </div>
+                {modalList.show && (
+                  <div className="modal" ref={modalListRef}>
+                    <CatalogList
+                      category={modalList.category}
+                      genre={modalList.genre}
+                      genreTitle={modalList.genreTitle}
+                      close={closeModalList}
+                    />
+                  </div>
                 )}
-              />
-              {routes}
-              <Route path="/:category/genre-:genre" component={CatalogList} />
-            </div>
-            {modal.show && (
-              <div className="modal" ref={modalRef}>
-                <CatalogDetail id={modal.detailId} close={closeModal} />
+                {modalDetail.show && (
+                  <div className="modal" ref={modalDetailRef}>
+                    <CatalogDetail
+                      id={modalDetail.detailId}
+                      close={closeModalDetail}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </AppContext.Provider>
-      </ScrollToTop>
-    </BrowserRouter>
+            </AppContext.Provider>
+          </ScrollToTop>
+        </BrowserRouter>
+      </QTAPI>
+    </ErrorBoundary>
   );
 }
 
