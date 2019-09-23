@@ -24,6 +24,7 @@ function Slider(props) {
   if (pageSize <= slidesList.length) maxPosition -= slideWidth;
 
   const sliderRef = useRef(null);
+  const galleryRef = useRef(null);
   const slides = slidesList.map((item, index) => {
     return (
       <li key={index} style={{ width: slideWidth }}>
@@ -63,8 +64,8 @@ function Slider(props) {
   };
 
   useEffect(() => {
-    if (sliderRef.current != null)
-      setCarouselWidth(sliderRef.current.clientWidth);
+    if (galleryRef.current != null)
+      setCarouselWidth(galleryRef.current.clientWidth);
   }, [windowWidth]);
 
   useEffect(() => {
@@ -127,7 +128,7 @@ function Slider(props) {
                   />
                 </React.Fragment>
               )}
-              <div className="gallery">
+              <div className="gallery" ref={galleryRef}>
                 <ul
                   className="images"
                   style={{ marginLeft: position }}

@@ -37,7 +37,7 @@ const SliderLoader = () => {
   const [carouselWidth, setCarouselWidth] = useState(0);
   const slidesCount = parseInt((carouselWidth + 20) / 165);
 
-  const handleResize = e => {
+  const handleResize = () => {
     setWindowWidth(document.documentElement.offsetWidth);
   };
 

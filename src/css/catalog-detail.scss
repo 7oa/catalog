@@ -3,6 +3,11 @@
   flex-direction: column;
   flex-grow: 1;
   height: 100%;
+  opacity: 1;
+  transition: 0.1s;
+  &.loading {
+    opacity: 0;
+  }
   &__container {
     flex-grow: 1;
     overflow: hidden;
@@ -22,7 +27,7 @@
     }
   }
   &__header {
-    margin-bottom: 40px;
+    margin-bottom: 29px;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -56,12 +61,11 @@
     flex: 1 1 auto;
     //padding-bottom: 50px;
     align-items: flex-start;
-    height: calc(100% - 93px);
+    height: calc(100% - 69px);
     margin-right: -30px;
   }
   &__col1 {
     flex: 0 0 auto;
-
     height: 100%;
   }
   &__col2 {
@@ -96,15 +100,17 @@
     margin-bottom: 35px;
     font-weight: 300;
   }
+  &__description {
+    margin-bottom: 4px;
+  }
   &__description-text {
     font-size: 14px;
-    margin-bottom: 20px;
     color: #000;
   }
   &__read-more {
-    color: #969696;
+    color: #000;
     text-decoration: none;
-    border-bottom: 1px solid #969696;
+    border-bottom: 1px solid #000;
     transition: 0.4s;
     font-size: 14px;
     &:hover {
@@ -114,34 +120,45 @@
   &__description-title {
     color: #969696;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 25px;
   }
   &__info-wrapper {
     display: flex;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
+    @media (max-width: 1200px) {
+      flex-direction: column;
+    }
   }
   &__info {
+    box-sizing: border-box;
     padding-bottom: 20px;
     max-width: 600px;
-    padding-right: 40px;
+    width: 50%;
+    padding-right: 50px;
+    flex: 0 0 auto;
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
   }
   &__info-table-row {
     display: flex;
     margin-bottom: 10px;
   }
   &__info-table {
-    margin-bottom: 30px;
+    margin-bottom: 18px;
   }
   &__info-table-label {
-    width: 120px;
+    width: 105px;
     flex: 0 0 auto;
-    margin-right: 20px;
+    margin-right: 10px;
     color: #969696;
     font-size: 14px;
   }
   &__info-table-val {
     font-size: 14px;
-    color: #000; //#1e1e1e;
+    color: #000;
+    word-break: break-word;
     a {
       color: #1e1e1e;
       text-decoration: none;
@@ -179,9 +196,14 @@
     }
   }
   &__files {
-    width: 600px;
-    max-width: 100%;
+    //width: 600px;
+    width: 50%;
+    max-width: 600px;
     flex: 0 0 auto;
+    margin-bottom: 10px;
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
   }
 }
 .buttons-line {
@@ -260,6 +282,7 @@
     box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.2);
     padding: 20px;
     width: 420px;
+
     &:after {
       content: "";
       position: absolute;

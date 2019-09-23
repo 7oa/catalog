@@ -1,0 +1,244 @@
+.react-checkbox-tree {
+  display: flex;
+}
+
+.react-checkbox-tree {
+  margin-left: -5px;
+  > ol > .rct-node-parent {
+    // -webkit-box-flex: 1;
+    // -ms-flex: 1 1 auto;
+    // flex: 1 1 auto;
+    margin-left: -20px;
+  }
+}
+
+.react-checkbox-tree ol {
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
+  // width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+.react-checkbox-tree ol ol {
+  padding-left: 17px;
+  box-sizing: border-box;
+}
+
+.react-checkbox-tree button {
+  line-height: normal;
+  color: inherit;
+}
+
+.react-checkbox-tree button:focus {
+  outline: none;
+}
+
+.react-checkbox-tree button:disabled {
+  cursor: not-allowed;
+}
+
+.react-checkbox-tree .rct-bare-label {
+  cursor: default;
+}
+
+.react-checkbox-tree label {
+  margin-bottom: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.react-checkbox-tree:not(.rct-native-display) input {
+  display: none;
+}
+
+.react-checkbox-tree.rct-native-display input {
+  margin: 0 5px;
+}
+
+// .react-checkbox-tree .rct-icon {
+//   font-family: "FontAwesome";
+//   font-style: normal;
+// }
+
+.rct-disabled > .rct-text > label {
+  //opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.rct-disabled > .rct-text > label:hover {
+  background: transparent;
+}
+
+.rct-disabled > .rct-text > label:active {
+  background: transparent;
+}
+
+.rct-text {
+  display: flex;
+  align-items: center;
+  //margin-bottom: 15px;
+  color: #222222;
+  font-size: 14px;
+  padding: 5px;
+  &:hover {
+    background-color: #f2f2f2;
+  }
+}
+
+.rct-options {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+  text-align: right;
+  opacity: 0.75;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 18px;
+}
+
+.rct-option:hover {
+  opacity: 1;
+}
+
+.rct-option + .rct-option {
+  margin-left: 2px;
+}
+
+// .rct-collapse,
+// .rct-checkbox,
+// .rct-node-icon {
+//   //padding: 0 5px;
+// }
+
+// .rct-collapse *,
+// .rct-checkbox *,
+// .rct-node-icon * {
+//   display: block;
+//   margin: 0;
+//   width: 14px;
+// }
+
+.rct-collapse {
+  border: 0;
+  background: none;
+  line-height: normal;
+  color: inherit;
+  display: none;
+  //flex: 0 0 auto;
+}
+.rct-node-parent {
+  .rct-node-leaf {
+    margin-left: 20px;
+  }
+}
+
+.rct-collapse.rct-collapse-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+}
+
+.rct-native-display .rct-checkbox {
+  display: none;
+}
+
+.rct-node-clickable {
+  cursor: pointer;
+}
+
+.rct-node-clickable:hover {
+  background: rgba(51, 51, 204, 0.1);
+}
+
+.rct-node-clickable:focus {
+  outline: 0;
+  background: rgba(51, 51, 204, 0.2);
+}
+
+.rct-node-icon {
+  //color: #33c;
+  display: none;
+}
+
+.rct-icon-parent-open::before {
+  content: "\f115";
+}
+
+.rct-icon-parent-close::before {
+  content: "\f114";
+}
+
+.rct-icon-expand-all::before {
+  content: "\f0fe";
+}
+
+.rct-icon-collapse-all::before {
+  content: "\f146";
+}
+
+.rct-icon-expand-close,
+.rct-icon-expand-open {
+  width: 0;
+  height: 0;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-left: 5px solid #aaaaaa;
+  transition: 0.4s;
+}
+
+.rct-icon-expand-open {
+  transform: rotate(90deg);
+}
+
+.rct-icon-uncheck,
+.rct-icon-check,
+.rct-icon-half-check {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid #acacac;
+  margin-right: 13px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  position: relative;
+  &:after {
+    content: "";
+    display: block;
+    opacity: 0;
+    transition: 0.4s;
+    width: 3px;
+    height: 8px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 1px;
+    left: 4px;
+  }
+}
+
+.rct-icon-check {
+  background-color: #00aef2;
+  border-color: #00aef2;
+  &:after {
+    opacity: 1;
+  }
+}
+
+.rct-title {
+  display: flex;
+  width: calc(100% - 30px);
+}

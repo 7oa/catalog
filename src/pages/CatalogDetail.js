@@ -3,7 +3,8 @@ import React, {
   useRef,
   useEffect,
   useContext,
-  useCallback
+  useCallback,
+  useMemo
 } from "react";
 import FilesList from "../components/FilesList";
 //import WatchList from "../components/WatchList";
@@ -14,26 +15,64 @@ import Spinner from "../components/Spinner";
 import "../css/catalog-detail.scss";
 
 function CatalogItem(props) {
+  const [loading, setLoading] = useState(true);
   const [fullDescription, setFullDescription] = useState(true);
   const [openMoreImages, setOpenMoreImages] = useState(false);
   const [copyrightShow, setCopyrightShow] = useState(false);
   const [selectedTorrents, setSelectedTorrents] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(
+    document.documentElement.offsetWidth
+  );
+  //const [wideScreen, setWideScreen] = useState(false);
   const itemId = props.id;
   const [error, catalogItem] = useFetch("/item?id=" + itemId);
 
   const copyrightRef = useRef(null);
   const descriptionWrapperRef = useRef(null);
   const descriptionContentRef = useRef(null);
+  const filesRef = useRef(null);
+  const infoRef = useRef(null);
 
-  function handleClickOutside(e) {
+  const wideScreen = useMemo(() => windowWidth > 1200, [windowWidth]);
+
+  const handleClickOutside = e => {
     if (copyrightRef.current && !copyrightRef.current.contains(e.target)) {
       setCopyrightShow(false);
     }
-  }
+  };
 
-  function addTorrents(files) {
-    setSelectedTorrents(files);
-  }
+  const handleResize = () => {
+    setWindowWidth(document.documentElement.offsetWidth);
+  };
+
+  const addTorrents = files => setSelectedTorrents(files);
+
+  useEffect(() => {
+    if (wideScreen) setFullDescription(true);
+    if (
+      !wideScreen &&
+      descriptionContentRef.current != null &&
+      descriptionWrapperRef.current != null
+    ) {
+      if (
+        descriptionWrapperRef.current.offsetHeight <
+        descriptionContentRef.current.offsetHeight
+      )
+        setFullDescription(false);
+    }
+  }, [catalogItem, wideScreen]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]);
+
+  useEffect(() => {
+    if (catalogItem != null) setTimeout(() => setLoading(false), 200);
+    else setLoading(true);
+  }, [catalogItem]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -48,24 +87,11 @@ function CatalogItem(props) {
     else document.querySelector(".modal").style.overflow = "";
   }, [openMoreImages]);
 
-  useEffect(() => {
-    if (
-      descriptionContentRef.current != null &&
-      descriptionWrapperRef.current != null
-    ) {
-      if (
-        descriptionWrapperRef.current.offsetHeight <
-        descriptionContentRef.current.offsetHeight + 5
-      )
-        setFullDescription(false);
-    }
-  }, [catalogItem]);
-
   const mGetApi = useContext(QTContext);
 
   const handleClick = useCallback(
     play => {
-      catalogItem.content = selectedTorrents;
+      catalogItem.checked = selectedTorrents;
       mGetApi.loadCatalogTorrent(JSON.stringify(catalogItem), play);
     },
     [mGetApi, catalogItem, selectedTorrents]
@@ -129,7 +155,7 @@ function CatalogItem(props) {
   ));
 
   return (
-    <div className="catalog-detail">
+    <div className={`catalog-detail${loading ? " loading" : ""}`}>
       {openMoreImages && (
         <React.Fragment>
           <div className="lightbox__overlay" />
@@ -186,7 +212,7 @@ function CatalogItem(props) {
               className="catalog-detail__info-wrapper"
               ref={descriptionContentRef}
             >
-              <div className="catalog-detail__info">
+              <div className="catalog-detail__info" ref={infoRef}>
                 <div className="catalog-detail__info-table">
                   {description.file_size && (
                     <div className="catalog-detail__info-table-row">
@@ -346,7 +372,7 @@ function CatalogItem(props) {
                 )}
               </div>
               {catalogItem.content && catalogItem.content.length > 0 && (
-                <div className="catalog-detail__files">
+                <div className="catalog-detail__files" ref={filesRef}>
                   <FilesList
                     data={catalogItem.content}
                     addTorrents={addTorrents}

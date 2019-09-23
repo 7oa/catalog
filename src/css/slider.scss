@@ -4,12 +4,15 @@
 
 .arrow {
   position: absolute;
-  top: 25%;
+  top: 20%;
   font-size: 0;
   line-height: 0;
   width: 30px;
   height: 100px;
   transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
     border-color: #09b0f2;
   }
@@ -32,7 +35,8 @@
   &:after {
     border-left: 2px solid #b7b7b7;
     border-bottom: 2px solid #b7b7b7;
-    transform: rotate(45deg) translateX(50%) translateY(-50%);
+    transform: rotate(45deg);
+    transform-origin: 0 100%;
   }
 }
 
@@ -42,6 +46,7 @@
     border-right: 2px solid #b7b7b7;
     border-bottom: 2px solid #b7b7b7;
     transform: rotate(-45deg);
+    transform-origin: 100% 100%;
   }
 }
 
